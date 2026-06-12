@@ -23,3 +23,6 @@
 /public/assets/
 /assets/vendor/
 ###< symfony/asset-mapper ###
+
+###> BDD mySQL Projet7###
+/modelePhysiqueDeDonnees_MySQL.sql

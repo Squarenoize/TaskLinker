@@ -1,0 +1,51 @@
+classDiagram
+    
+    class Worker {
+        -string lastname
+        -string firstname
+        -string alias
+        -string role
+        -string email
+        -string password
+        -string contract
+        -date startingDate
+        -date deactivationDate
+        
+    }
+    
+    class Project {
+        -string name
+        -date startingDate
+        -date deadlineDate
+        -date archiveDate
+    }
+    
+    class Status {
+        -string name
+    }
+    
+    class Task {
+        -string title
+        -string description
+        -date deadlineDate
+    }
+    
+    class Tag {
+        -string name
+    }
+    
+    class Timeslot {
+        -datetime start
+        -datetime end
+    }
+    
+    %% Relations entre classes (avec cardinalités)
+    Worker "1" -- "0..*" Timeslot
+    Worker "0..1" -- "0..*" Task
+    Project "*" -- "0..*" Worker
+    Project "1" -- "0..*" Task
+    Project "1" -- "*" Status
+    Project "1" -- "0..*" Tag
+    Status "1" -- "0..*" Task
+    Task "1" -- "0..*" Timeslot
+    Task "0..*" -- "0..*" Tag
