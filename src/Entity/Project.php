@@ -25,7 +25,7 @@ class Project
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $deadline_date = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $archive_date = null;
 
     /**
@@ -99,7 +99,7 @@ class Project
         return $this->archive_date;
     }
 
-    public function setArchiveDate(\DateTimeImmutable $archive_date): static
+    public function setArchiveDate(?\DateTimeImmutable $archive_date): static
     {
         $this->archive_date = $archive_date;
 
