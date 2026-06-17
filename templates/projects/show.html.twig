@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+{% block title %} {{ project.name }} - TaskLinker{% endblock %}
+{% block project %}
+    <div class="user-list">
+        <div class="avatar">ND</div>
+        <div class="avatar">DB</div>
+    </div>
+    <a class="button" href="projet-edit.html">Modifier</a>
+{% endblock %}
+{% block body %}
+
+  <div id="tasks-container">
+    {% for status in statuses %}
+      <div class="task-column">
+        <h2>{{ status.name }}</h2>
+
+        <div class="tasks-list">
+          {% for task in status.tasks %}
+            <a class="task" href="tache.html">
+              <h3>{{ task.title }}</h3>
+              <p>{{ task.description }}</p>
+              <div class="task-infos">
+                <div class="task-deadline">
+                  <i class="fa-regular fa-calendar"></i>
+                  {{ task.deadlineDate ? task.deadlineDate|date('d/m/Y') : '' }}
+                </div>
+
+                {% if task.worker %}
+                  <div class="mini-user">
+                    {{ task.worker.firstname|first }}{{ task.worker.lastname|first }}
+                  </div>
+                {% endif %}
+              </div>
+            </a>
+          {% else %}
+            <p>Aucune tâche dans ce statut.</p>
+          {% endfor %}
+          <a href="" class="task-add">
+          + Ajouter une tâche
+          </a>
+        </div>
+      </div>
+    {% else %}
+      <p>Aucun statut pour ce projet.</p>
+    {% endfor %}
+  </div>
+      
+{% endblock %}

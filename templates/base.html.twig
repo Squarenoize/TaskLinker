@@ -48,7 +48,10 @@
                 <header>
                 <div id="current-user"></div>
                 <div id="title-page">
-                    <h1> {{ pageTitle }} </h1>
+                    <div class="flex-header">
+                        <h1> {{ pageTitle }} </h1>
+                        {% block project %}{% endblock %}
+                    </div>
                 </div>
                 </header>
                 <div id="content">

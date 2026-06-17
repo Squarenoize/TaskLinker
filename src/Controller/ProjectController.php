@@ -3,6 +3,8 @@
 namespace App\Controller;
 
 use App\Repository\ProjectRepository;
+use App\Repository\StatusRepository;
+use App\Repository\TaskRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -10,10 +12,18 @@ use Symfony\Component\Routing\Attribute\Route;
 #[Route('/project')]
 final class ProjectController extends AbstractController
 {
-    #[Route('/', name: 'app_projects')]
-    public function index(ProjectRepository $projectRepository): Response
+    public function __construct(
+        private ProjectRepository $projectRepository,
+        private StatusRepository $statusRepository,
+        private TaskRepository $taskRepository
+        )
     {
-        $projects = $projectRepository->findAll();
+    }
+
+    #[Route('/', name: 'app_projects')]
+    public function index(): Response
+    {
+        $projects = $this->projectRepository->findAll();
 
         return $this->render('projects/index.html.twig', [
             'pageTitle' => 'Projets',
@@ -21,21 +31,38 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}', name: 'app_project_show')]
+    #[Route('/{id}', name: 'app_project_show', requirements: ['id' => '\d+'], methods: ['GET'])]
     public function show(int $id): Response
     {
+        $project = $this->projectRepository->find($id);
+
+        if (!$project) {
+            throw $this->createNotFoundException('Projet non trouvé.');
+        }
+        
+        $statuses = $this->statusRepository->findBy(['project' => $project]);
+        $tasks = $this->taskRepository->findBy(['project' => $project]);
+
         return $this->render('projects/show.html.twig', [
-            'pageTitle' => 'Détails du projet',
-            'projectId' => $id,
+            'pageTitle' => $project->getName(),
+            'project' => $project,
+            'statuses' => $statuses,
+            'tasks' => $tasks,
         ]);
     }
 
-    #[Route('/{id}/edit', name: 'app_project_edit')]
+    #[Route('/{id}/edit', name: 'app_project_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(int $id): Response
     {
+        $project = $this->projectRepository->find($id);
+
+        if (!$project) {
+            throw $this->createNotFoundException('Projet non trouvé.');
+        }
+
         return $this->render('projects/edit.html.twig', [
             'pageTitle' => 'Modifier le projet',
-            'projectId' => $id,
+            'project' => $project,
         ]);
     }
 
