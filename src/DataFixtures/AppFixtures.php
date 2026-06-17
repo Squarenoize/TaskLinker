@@ -6,6 +6,7 @@ use App\Entity\Project;
 use App\Entity\Status;
 use App\Entity\Task;
 use App\Entity\Worker;
+use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 
@@ -111,22 +112,46 @@ class AppFixtures extends Fixture
             ->setStatus($pending)
             ->setWorker($worker1);
 
-        $manager->persist($project);
-        $manager->persist($project2);
-        $manager->persist($todo);
-        $manager->persist($doing);
-        $manager->persist($done);
-        $manager->persist($pending);
-        $manager->persist($todo2);
-        $manager->persist($worker1);
-        $manager->persist($worker2);
-        $manager->persist($worker3);
-        $manager->persist($task1);
-        $manager->persist($task2);
-        $manager->persist($task3);
-        $manager->persist($task4);
-        $manager->persist($task5);
-        $manager->persist($task6);
+        $user = (new User())
+            ->setEmail('admin@example.com')
+            ->setPassword('adminpassword')
+            ->setRoles(['ROLE_ADMIN'])
+            ->setWorker($worker1)
+            ->setAlias('Max');
+
+        $user2 = (new User())
+            ->setEmail('user@example.com')
+            ->setPassword('userpassword')
+            ->setRoles(['ROLE_USER'])
+            ->setWorker($worker2)
+            ->setAlias('Ninou');
+
+        $user3 = (new User())
+            ->setEmail('user3@example.com')
+            ->setPassword('user3password')
+            ->setRoles(['ROLE_USER'])
+            ->setWorker($worker3)
+            ->setAlias('Lulu');
+
+        //$manager->persist($project);
+        //$manager->persist($project2);
+        //$manager->persist($todo);
+        //$manager->persist($doing);
+        //$manager->persist($done);
+        //$manager->persist($pending);
+        //$manager->persist($todo2);
+        //$manager->persist($worker1);
+        //$manager->persist($worker2);
+        //$manager->persist($worker3);
+        //$manager->persist($task1);
+        //$manager->persist($task2);
+        //$manager->persist($task3);
+        //$manager->persist($task4);
+        //$manager->persist($task5);
+        //$manager->persist($task6);
+        $manager->persist($user);
+        $manager->persist($user2);
+        $manager->persist($user3);
 
         $manager->flush();
     }
