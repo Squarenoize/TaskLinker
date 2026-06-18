@@ -38,12 +38,16 @@ class AppFixtures extends Fixture
             ->setName('Done')
             ->setProject($project);
 
-        $pending = (new Status())
-            ->setName('Pending')
-            ->setProject($project2);
-
         $todo2 = (new Status())
             ->setName('To Do')
+            ->setProject($project2);
+
+        $doing2 = (new Status())
+            ->setName('Doing')
+            ->setProject($project2);
+
+        $done2 = (new Status())
+            ->setName('Done')
             ->setProject($project2);
 
         $worker1 = (new Worker())
@@ -109,7 +113,7 @@ class AppFixtures extends Fixture
             ->setDescription('Permettre l\'envoi de mails pour les notifications')
             ->setDeadlineDate(new \DateTimeImmutable('2026-11-20'))
             ->setProject($project2)
-            ->setStatus($pending)
+            ->setStatus($doing2)
             ->setWorker($worker1);
 
         $user = (new User())
@@ -133,22 +137,29 @@ class AppFixtures extends Fixture
             ->setWorker($worker3)
             ->setAlias('Lulu');
 
-        //$manager->persist($project);
-        //$manager->persist($project2);
-        //$manager->persist($todo);
-        //$manager->persist($doing);
-        //$manager->persist($done);
-        //$manager->persist($pending);
-        //$manager->persist($todo2);
-        //$manager->persist($worker1);
-        //$manager->persist($worker2);
-        //$manager->persist($worker3);
-        //$manager->persist($task1);
-        //$manager->persist($task2);
-        //$manager->persist($task3);
-        //$manager->persist($task4);
-        //$manager->persist($task5);
-        //$manager->persist($task6);
+            $project->addWorker($worker1);
+            $project->addWorker($worker2);
+
+            $project2->addWorker($worker1);
+            $project2->addWorker($worker3);
+
+        $manager->persist($project);
+        $manager->persist($project2);
+        $manager->persist($todo);
+        $manager->persist($doing);
+        $manager->persist($done);
+        $manager->persist($todo2);
+        $manager->persist($doing2);
+        $manager->persist($done2);
+        $manager->persist($worker1);
+        $manager->persist($worker2);
+        $manager->persist($worker3);
+        $manager->persist($task1);
+        $manager->persist($task2);
+        $manager->persist($task3);
+        $manager->persist($task4);
+        $manager->persist($task5);
+        $manager->persist($task6);
         $manager->persist($user);
         $manager->persist($user2);
         $manager->persist($user3);

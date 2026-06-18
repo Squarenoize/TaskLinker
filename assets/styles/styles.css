@@ -288,6 +288,13 @@ a.task p {
     gap: 10px;
 }
 
+.no-task {
+    font-size: 14px;
+    font-weight: 500;
+    color: #5C5C5C;
+    margin-left: 20px;
+}
+
 .mini-user {
     display: flex;
     align-items: center;

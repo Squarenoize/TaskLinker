@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProjectRepository::class)]
 class Project
@@ -17,12 +18,13 @@ class Project
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $name = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $starting_date = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $deadline_date = null;
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
@@ -75,7 +77,7 @@ class Project
         return $this->starting_date;
     }
 
-    public function setStartingDate(\DateTimeImmutable $starting_date): static
+    public function setStartingDate(?\DateTimeImmutable $starting_date): static
     {
         $this->starting_date = $starting_date;
 
@@ -87,7 +89,7 @@ class Project
         return $this->deadline_date;
     }
 
-    public function setDeadlineDate(\DateTimeImmutable $deadline_date): static
+    public function setDeadlineDate(?\DateTimeImmutable $deadline_date): static
     {
         $this->deadline_date = $deadline_date;
 

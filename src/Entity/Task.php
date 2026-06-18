@@ -7,6 +7,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: TaskRepository::class)]
 class Task
@@ -17,12 +18,13 @@ class Task
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Assert\NotBlank]
     private ?string $title = null;
 
     #[ORM\Column(type: Types::TEXT, nullable: true)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::DATE_IMMUTABLE)]
+    #[ORM\Column(type: Types::DATE_IMMUTABLE, nullable: true)]
     private ?\DateTimeImmutable $deadline_date = null;
 
     #[ORM\ManyToOne(inversedBy: 'tasks')]
@@ -88,7 +90,7 @@ class Task
         return $this->deadline_date;
     }
 
-    public function setDeadlineDate(\DateTimeImmutable $deadline_date): static
+    public function setDeadlineDate(?\DateTimeImmutable $deadline_date): static
     {
         $this->deadline_date = $deadline_date;
 

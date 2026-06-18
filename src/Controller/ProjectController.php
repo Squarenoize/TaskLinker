@@ -2,12 +2,16 @@
 
 namespace App\Controller;
 
+use App\Entity\Project;
 use App\Repository\ProjectRepository;
 use App\Repository\StatusRepository;
 use App\Repository\TaskRepository;
+use App\Form\ProjectType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/project')]
 final class ProjectController extends AbstractController
@@ -15,7 +19,7 @@ final class ProjectController extends AbstractController
     public function __construct(
         private ProjectRepository $projectRepository,
         private StatusRepository $statusRepository,
-        private TaskRepository $taskRepository
+        private TaskRepository $taskRepository,
         )
     {
     }
@@ -40,6 +44,7 @@ final class ProjectController extends AbstractController
             throw $this->createNotFoundException('Projet non trouvé.');
         }
         
+        $workers = $project->getWorkers();
         $statuses = $this->statusRepository->findBy(['project' => $project]);
         $tasks = $this->taskRepository->findBy(['project' => $project]);
 
@@ -48,11 +53,40 @@ final class ProjectController extends AbstractController
             'project' => $project,
             'statuses' => $statuses,
             'tasks' => $tasks,
+            'workers' => $workers,
+        ]);
+    }
+
+    #[Route('/new', name: 'app_project_new', methods: ['GET', 'POST'])]
+    public function create(Request $request, EntityManagerInterface $entityManager): Response
+    {
+        $project = new Project();
+        $form = $this->createForm(ProjectType::class, $project);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($project);
+            $entityManager->flush();
+            // Create default statuses for the new project
+            $defaultStatuses = ['To Do', 'Doing', 'Done'];
+            foreach ($defaultStatuses as $statusName) {
+                $status = new \App\Entity\Status();
+                $status->setName($statusName);
+                $status->setProject($project);
+                $entityManager->persist($status);
+            }
+            $entityManager->flush();
+            return $this->redirectToRoute('app_project_show', ['id' => $project->getId()]);
+        }
+
+        return $this->render('projects/new.html.twig', [
+            'pageTitle' => 'Nouveau projet',
+            'form' => $form->createView(),
         ]);
     }
 
     #[Route('/{id}/edit', name: 'app_project_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function edit(int $id): Response
+    public function edit(int $id, Request $request): Response
     {
         $project = $this->projectRepository->find($id);
 
@@ -66,18 +100,10 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    #[Route('/create', name: 'app_project_create')]
-    public function create(): Response
+    #[Route('/{id}/archive', name: 'app_project_archive')]
+    public function archive(int $id): Response
     {
-        return $this->render('projects/create.html.twig', [
-            'pageTitle' => 'Créer un projet',
-        ]);
-    }
-
-    #[Route('/{id}/delete', name: 'app_project_delete')]
-    public function delete(int $id): Response
-    {
-        // Logic for deleting a project would go here
+        // Logic for archiving a project would go here
 
         return $this->redirectToRoute('app_projects');
     }
