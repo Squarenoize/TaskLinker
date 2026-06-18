@@ -4,11 +4,6 @@
 
 {% block body %}
 
-    {{ form_start(form) }}
-    {{ form_row(form.name, {'label': 'Titre du projet'}) }}
-    {{ form_row(form.workers, {'label': 'Inviter des membres'}) }}
-    <br>
-    <button class="button button-submit">Continuer</button>
-    {{ form_end(form) }}
+    {{ include('projects/_form.html.twig', {'form': form, 'button_label': 'Continuer'}) }}
             
 {% endblock %}
