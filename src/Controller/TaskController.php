@@ -50,7 +50,7 @@ final class TaskController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_task_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
-    public function edit(int $id): Response
+    public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $task = $this->taskRepository->find($id);
 
@@ -58,10 +58,19 @@ final class TaskController extends AbstractController
             throw $this->createNotFoundException('Tâche non trouvée.');
         }
 
+        $form = $this->createForm(TaskType::class, $task);
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->flush();
+
+            return $this->redirectToRoute('app_project_show', ['id' => $task->getProject()->getId()]);
+        }
+
         return $this->render('task/edit.html.twig', [
-            'controller_name' => 'TaskController',
             'pageTitle' => $task->getTitle(),
             'task' => $task,
+            'form' => $form->createView(),
         ]);
     }
 }

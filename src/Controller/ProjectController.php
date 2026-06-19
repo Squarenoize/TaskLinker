@@ -89,12 +89,13 @@ final class ProjectController extends AbstractController
     public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $project = $this->projectRepository->find($id);
-        $form = $this->createForm(ProjectType::class, $project);
-        $form->handleRequest($request);
 
         if (!$project) {
             throw $this->createNotFoundException('Projet non trouvé.');
         }
+
+        $form = $this->createForm(ProjectType::class, $project);
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($project);

@@ -1,0 +1,10 @@
+    {{ form_start(form) }}
+        {{ form_row(form.title, {'label': 'Titre de la tâche'}) }}
+        {{ form_row(form.description, {'label': 'Description'}) }}
+        {{ form_row(form.deadline_date, {'label': 'Date limite'}) }}
+        {{ form_row(form.status, {'label': 'Statut'}) }}
+        {{ form_row(form.worker, {'label': 'Membre'}) }}
+        <button class="button button-submit">{{ button_label|default('Enregistrer') }}</button>
+    {{ form_end(form) }}
+    
+

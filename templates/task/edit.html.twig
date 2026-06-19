@@ -1,20 +1,10 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Créer une tâche - TaskLinker{% endblock %}
+{% block title %}Modifier une tâche - TaskLinker{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    {{ include('task/_form.twig.twig', {'form': form, 'button_label': 'Modifier'}) }}
+    <a href="{{ path('app_task_delete', {'id': task.id}) }}" class="delete-task">Supprimer la tâche</a>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code>C:/Users/f.dube/Documents/OpenClassrooms/Projet_8/Mission/TaskLinker/src/Controller/TaskController.php</code></li>
-        <li>Your template at <code>C:/Users/f.dube/Documents/OpenClassrooms/Projet_8/Mission/TaskLinker/templates/task/index.html.twig</code></li>
-    </ul>
-</div>
 {% endblock %}
