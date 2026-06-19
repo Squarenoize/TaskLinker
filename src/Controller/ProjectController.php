@@ -27,7 +27,7 @@ final class ProjectController extends AbstractController
     #[Route('/', name: 'app_projects')]
     public function index(): Response
     {
-        $projects = $this->projectRepository->findAll();
+        $projects = $this->projectRepository->findAllActive();
 
         return $this->render('projects/index.html.twig', [
             'pageTitle' => 'Projets',
@@ -109,10 +109,18 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/archive', name: 'app_project_archive')]
-    public function archive(int $id): Response
+    #[Route('/{id}/archive', name: 'app_project_archive', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function archive(int $id, EntityManagerInterface $entityManager): Response
     {
-        // Logic for archiving a project would go here
+        $project = $this->projectRepository->find($id);
+
+        if (!$project) {
+            throw $this->createNotFoundException('Projet non trouvé.');
+        }
+
+        $project->setArchiveDate(new \DateTimeImmutable());
+        $entityManager->persist($project);
+        $entityManager->flush();
 
         return $this->redirectToRoute('app_projects');
     }
