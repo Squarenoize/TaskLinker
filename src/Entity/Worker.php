@@ -204,7 +204,7 @@ class Worker
 
     public function setUser(?User $user): static
     {
-        // maintient la cohérence bidirectionnelle
+        // keep the bidirectional consistency
         if ($user !== null && $user->getWorker() !== $this) {
             $user->setWorker($this);
         }
