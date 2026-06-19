@@ -5,6 +5,11 @@
         {{ form_row(form.status, {'label': 'Statut'}) }}
         {{ form_row(form.worker, {'label': 'Membre'}) }}
         <button class="button button-submit">{{ button_label|default('Enregistrer') }}</button>
+
+        {% if task is defined and task.id is not null %}
+            <a href="{{ path('app_task_delete', {'id': task.id}) }}" class="delete-task">Supprimer la tâche</a>
+        {% endif %}
+        
     {{ form_end(form) }}
     
 

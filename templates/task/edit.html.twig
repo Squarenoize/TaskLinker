@@ -5,6 +5,5 @@
 {% block body %}
 
     {{ include('task/_form.twig.twig', {'form': form, 'button_label': 'Modifier'}) }}
-    <a href="{{ path('app_task_delete', {'id': task.id}) }}" class="delete-task">Supprimer la tâche</a>
 
 {% endblock %}

@@ -73,4 +73,19 @@ final class TaskController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+    #[Route('/{id}/delete', name: 'app_task_delete', requirements: ['id' => '\d+'], methods: ['GET'])]
+    public function delete(int $id, EntityManagerInterface $entityManager): Response
+    {
+        $task = $this->taskRepository->find($id);
+
+        if (!$task) {
+            throw $this->createNotFoundException('Tâche non trouvée.');
+        }
+
+        $entityManager->remove($task);
+        $entityManager->flush();
+
+        return $this->redirectToRoute('app_project_show', ['id' => $task->getProject()->getId()]);
+    }
 }
