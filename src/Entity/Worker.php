@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Entity\User;
 use App\Repository\WorkerRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -27,6 +28,9 @@ class Worker
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     private ?\DateTimeImmutable $starting_date = null;
+
+    #[ORM\OneToOne(mappedBy: 'worker', targetEntity: User::class)]
+    private ?User $user = null;
 
     /**
      * @var Collection<int, Task>
@@ -189,6 +193,23 @@ class Worker
                 $timeslot->setWorker(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getUser(): ?User
+    {
+        return $this->user;
+    }
+
+    public function setUser(?User $user): static
+    {
+        // maintient la cohérence bidirectionnelle
+        if ($user !== null && $user->getWorker() !== $this) {
+            $user->setWorker($this);
+        }
+
+        $this->user = $user;
 
         return $this;
     }

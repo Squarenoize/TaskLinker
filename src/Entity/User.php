@@ -32,7 +32,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?string $password = null;
 
-    #[ORM\OneToOne(cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(inversedBy: 'user', cascade: ['persist', 'remove'])]
     #[ORM\JoinColumn(nullable: false)]
     private ?Worker $worker = null;
 
@@ -120,6 +120,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setWorker(Worker $worker): static
     {
         $this->worker = $worker;
+
+        if ($worker->getUser() !== $this) {
+            $worker->setUser($this);
+        }
 
         return $this;
     }
