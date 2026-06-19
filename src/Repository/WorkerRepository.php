@@ -16,6 +16,16 @@ class WorkerRepository extends ServiceEntityRepository
         parent::__construct($registry, Worker::class);
     }
 
+    public function findAllActive(): array
+    {
+        return $this->createQueryBuilder('w')
+            ->leftJoin('w.user', 'u')
+            ->addSelect('u')
+            ->where('u.deactivation_date IS NULL')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Worker[] Returns an array of Worker objects
     //     */

@@ -27,12 +27,13 @@
                         </td>
                         <td>{{ worker.contract }}</td>
                         <td>
-                           <a class="button button-edit-team" href="employe.html">
+                           <a class="button button-edit-team" href="{{ path('worker_edit', {'id': worker.id}) }}">
                            Éditer
                            </a>
-                           <a class="delete-team" href="#">
-                           Supprimer
-                           </a>
+                           <form method="post" action="{{ path('worker_deactivate', {'id': worker.id}) }}" style="display:inline;" onsubmit="return confirm('Désactiver cet employé ?');">
+                              <input type="hidden" name="_token" value="{{ csrf_token('deactivate_worker_' ~ worker.id) }}">
+                              <button type="submit" class="delete-team">Supprimer</button>
+                           </form>
                         </td>
                      </tr>
                         {% endfor %}

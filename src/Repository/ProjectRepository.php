@@ -18,11 +18,11 @@ class ProjectRepository extends ServiceEntityRepository
 
     public function findAllActive(): array
     {
-    return $this->createQueryBuilder('p')
-    ->andWhere('p.archive_date IS NULL')
-    ->orderBy('p.id', 'DESC')
-    ->getQuery()
-    ->getResult();
+        return $this->createQueryBuilder('p')
+        ->andWhere('p.archive_date IS NULL')
+        ->orderBy('p.id', 'DESC')
+        ->getQuery()
+        ->getResult();
     }
 
     //    /**
