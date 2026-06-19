@@ -1,3 +1,5 @@
+<div class="task-form-actions">
+
     {{ form_start(form) }}
         {{ form_row(form.title, {'label': 'Titre de la tâche'}) }}
         {{ form_row(form.description, {'label': 'Description'}) }}
@@ -5,11 +7,14 @@
         {{ form_row(form.status, {'label': 'Statut'}) }}
         {{ form_row(form.worker, {'label': 'Membre'}) }}
         <button class="button button-submit">{{ button_label|default('Enregistrer') }}</button>
-
-        {% if task is defined and task.id is not null %}
-            <a href="{{ path('app_task_delete', {'id': task.id}) }}" class="delete-task">Supprimer la tâche</a>
-        {% endif %}
-        
+  
     {{ form_end(form) }}
-    
 
+    {% if task is defined and task.id is not null %}
+        <form method="post" action="{{ path('app_task_delete', {'id': task.id}) }}" onsubmit="return confirm('Supprimer cette tâche ?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete_task_' ~ task.id) }}">
+            <button type="submit" class="delete-task">Supprimer la tâche</button>
+        </form>
+    {% endif %}
+
+</div>

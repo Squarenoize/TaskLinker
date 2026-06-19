@@ -109,13 +109,17 @@ final class ProjectController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/archive', name: 'app_project_archive', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function archive(int $id, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/archive', name: 'app_project_archive', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function archive(int $id, EntityManagerInterface $entityManager, Request $request): Response
     {
         $project = $this->projectRepository->find($id);
 
         if (!$project) {
             throw $this->createNotFoundException('Projet non trouvé.');
+        }
+
+        if (!$this->isCsrfTokenValid('archive_project_' . $project->getId(), (string) $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
         $project->setArchiveDate(new \DateTimeImmutable());

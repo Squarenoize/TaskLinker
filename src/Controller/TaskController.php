@@ -74,13 +74,17 @@ final class TaskController extends AbstractController
         ]);
     }
 
-    #[Route('/{id}/delete', name: 'app_task_delete', requirements: ['id' => '\d+'], methods: ['GET'])]
-    public function delete(int $id, EntityManagerInterface $entityManager): Response
+    #[Route('/{id}/delete', name: 'app_task_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
+    public function delete(int $id, EntityManagerInterface $entityManager, Request $request): Response
     {
         $task = $this->taskRepository->find($id);
 
         if (!$task) {
             throw $this->createNotFoundException('Tâche non trouvée.');
+        }
+
+        if (!$this->isCsrfTokenValid('delete_task_' . $task->getId(), (string) $request->request->get('_token'))) {
+            throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
         $entityManager->remove($task);

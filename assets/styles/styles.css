@@ -125,6 +125,20 @@ div#content {
     padding: 15px;
 }
 
+.card-project-icons .card-project-archive-form {
+    width: auto;
+    margin: 0;
+    display: inline-flex;
+}
+
+.card-project-icons .card-project-archive-form button {
+    padding: 0;
+    border: none;
+    background: transparent;
+    line-height: 1;
+    cursor: pointer;
+}
+
 .card-project > a, .card-project .card-project-icons {
     transition: 0.3s;
 }
@@ -465,13 +479,26 @@ form ul {
     font-style: italic;
 }
 
-a.delete-task {
+.task-form-actions {
+    width: 320px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+
+.delete-task {
     color: #E14343;
     font-size: 14px;
     font-weight: 600;
-    text-align: center;
+    border: none;
+    background: none;
+    text-decoration: underline;
+    cursor: pointer;
+    padding-top: 20px;
     display: block;
-    margin-top: 20px;
+    width: fit-content;
+    margin: 0 auto; 
 }
 
 form .select2-container--default .select2-selection--multiple .select2-selection__choice {
