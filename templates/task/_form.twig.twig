@@ -7,7 +7,6 @@
         {{ form_row(form.status, {'label': 'Statut'}) }}
         {{ form_row(form.worker, {'label': 'Membre'}) }}
         <button class="button button-submit">{{ button_label|default('Enregistrer') }}</button>
-  
     {{ form_end(form) }}
 
     {% if task is defined and task.id is not null %}
