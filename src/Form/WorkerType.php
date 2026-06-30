@@ -3,12 +3,12 @@
 namespace App\Form;
 
 use App\Entity\Worker;
+use App\Form\UserType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
-use Symfony\Component\Form\Extension\Core\Type\EmailType;
 
 class WorkerType extends AbstractType
 {
@@ -21,10 +21,7 @@ class WorkerType extends AbstractType
             ->add('firstname', TextType::class, [
                 'required' => true
             ])
-            ->add('email', EmailType::class, [
-                'required' => true,
-                'mapped' => false
-            ])
+            ->add('user', UserType::class) // Embedding the UserType form
             ->add('contract', TextType::class, [
                 'required' => true
             ])

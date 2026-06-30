@@ -36,19 +36,9 @@ final class WorkerController extends AbstractController
 
         $form = $this->createForm(WorkerType::class, $worker);
         
-        // Map the email field to the User entity if it exists
-        $user = $worker->getUser();
-        if ($user) {
-            $form->get('email')->setData($user->getEmail());
-        }
-        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $email = $form->get('email')->getData();
-            if ($user && $email) {
-                $user->setEmail($email);
-            }
 
             $entityManager->flush();
 

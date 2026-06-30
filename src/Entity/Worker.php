@@ -32,7 +32,6 @@ class Worker
 
     #[ORM\Column(type: Types::DATE_IMMUTABLE)]
     #[Assert\NotBlank]
-    #[Assert\Date]
     private ?\DateTimeImmutable $starting_date = null;
 
     #[ORM\OneToOne(mappedBy: 'worker', targetEntity: User::class)]
