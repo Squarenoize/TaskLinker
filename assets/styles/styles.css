@@ -16,6 +16,21 @@ html, body {
     height: 100vh;
     background: url('../img/public-background.jpg') center center no-repeat;
 
+    a, form label {
+                color: #FFFFFF;
+            }
+
+    /* Style pour les erreurs de formulaire sur pages publiques */
+    ul li, .invalid-feedback, .form-error-message {
+        background: rgba(255, 255, 255, 0.95);
+        text-align: center;
+        padding: 8px 12px !important;
+        border-radius: 5px !important;
+        margin: 8px 0 !important;
+        display: block !important;
+        list-style: none !important;
+    }
+
     img {
         width: 183px;
         height: 23px;
@@ -27,8 +42,11 @@ html, body {
         justify-content: center;
 
         .main-public-content {
+            font-family: Manrope;
+            color: #FFFFFF;
             margin-top: 61px;
             display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
             width: 710px;
@@ -37,9 +55,62 @@ html, body {
             border-radius: 30px;
             box-shadow: 0px 4px 24px 0px #00000008;
 
+            h1 {
+                font-size: 34px;
+                font-weight: 700;
+            }
+
+            h2 {
+                font-size: 22px;
+                font-weight: 400;
+                margin-bottom: 75px;
+            }
+
+            h3 {
+                font-size: 18px;
+                font-weight: 400;
+                margin-bottom: 10px;
+            }
+
+            .btn {
+                text-decoration: none;
+                width: 224px;
+                height: 74px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                color: #ffffff;
+                background: #1C5B50;
+                padding: 10px 20px;
+                border-radius: 10px;
+                font-size: 14px;
+                font-weight: 700;
+                margin-top: 25px;
+                margin-bottom: 25px;
+            }
+
+            .btn-secondary {
+                    background: #B1D89D;
+                    color: #4D8077;
+            }
+
+            .separator {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            
+                .separator-line {
+                    width: 139px;
+                    height: 0;
+                    border: 1px solid #FFFFFF;
+                    margin: 0 10px;
+                }
+            }
         }
      }
 }
+
+
 
 .sf-toolbar {
     position: fixed;
