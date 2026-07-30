@@ -5,6 +5,7 @@ namespace App\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\DBAL\Exception\UniqueConstraintViolationException;
 use App\Form\RegistrationType;
 use App\Entity\User;
 use App\Entity\Worker;
@@ -19,14 +20,6 @@ final class HomeController extends AbstractController
     {
         return $this->render('public/dispatch.html.twig', [
             'pageTitle' => 'Bienvenue sur TaskLinker',
-        ]);
-    }
-
-    #[Route('/login', name: 'app_login')]
-    public function login(): Response
-    {
-        return $this->render('public/login.html.twig', [
-            'pageTitle' => 'Se connecter',
         ]);
     }
 
@@ -47,10 +40,15 @@ final class HomeController extends AbstractController
             $hashedPassword = $passwordHasher->hashPassword($user, $plainPassword);
             $user->setPassword($hashedPassword);
 
-            $entityManager->persist($user);
-            $entityManager->flush();
+            try {
+                $entityManager->persist($user);
+                $entityManager->flush();
 
-            return $this->redirectToRoute('app_login');
+                $this->addFlash('success', 'Votre compte a été créé avec succès !');
+                return $this->redirectToRoute('app_login');
+            } catch (UniqueConstraintViolationException $e) {
+                $this->addFlash('error', 'Cette adresse email est déjà utilisée.');
+            }
         }
 
         return $this->render('public/register.html.twig', [

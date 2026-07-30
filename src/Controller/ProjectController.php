@@ -32,6 +32,7 @@ final class ProjectController extends AbstractController
         return $this->render('projects/index.html.twig', [
             'pageTitle' => 'Projets',
             'projects' => $projects,
+            'activeLink' => 'projects',
         ]);
     }
 

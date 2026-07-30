@@ -26,6 +26,17 @@ class WorkerRepository extends ServiceEntityRepository
             ->getResult();
     }
 
+    public function findWithUser(int $id): ?Worker
+    {
+        return $this->createQueryBuilder('w')
+            ->leftJoin('w.user', 'u')
+            ->addSelect('u')
+            ->where('w.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
+
     //    /**
     //     * @return Worker[] Returns an array of Worker objects
     //     */

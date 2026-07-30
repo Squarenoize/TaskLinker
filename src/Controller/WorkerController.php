@@ -22,6 +22,7 @@ final class WorkerController extends AbstractController
         return $this->render('worker/index.html.twig', [
             'pageTitle' => 'Équipe',
             'workers' => $workers,
+            'activeLink' => 'workers',
         ]);
     }
 
@@ -55,7 +56,7 @@ final class WorkerController extends AbstractController
     #[Route('/deactivate/{id}', name: 'worker_deactivate', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function deactivate(int $id, WorkerRepository $workerRepository, EntityManagerInterface $entityManager, Request $request): Response
     {
-        $worker = $workerRepository->find($id);
+        $worker = $workerRepository->findWithUser($id);
 
         if (!$worker) {
             throw $this->createNotFoundException('Worker not found');
@@ -65,12 +66,16 @@ final class WorkerController extends AbstractController
         throw $this->createAccessDeniedException('Invalid CSRF token.');
         }
 
-        $user = $worker->getUser();
-        if (!$user) {
-            throw $this->createNotFoundException('User linked to worker not found');
+        // Rechercher le User via une requête DQL directe
+        $user = $entityManager->createQuery(
+            'SELECT u FROM App\Entity\User u WHERE u.worker = :worker'
+        )
+        ->setParameter('worker', $worker)
+        ->getOneOrNullResult();
+        
+        if ($user) {
+            $user->setDeactivationDate(new \DateTimeImmutable());
         }
-
-        $user->setDeactivationDate(new \DateTimeImmutable());
 
         foreach ($worker->getTasks() as $task) {
             $task->setWorker(null);
@@ -81,6 +86,8 @@ final class WorkerController extends AbstractController
         }
 
         $entityManager->flush();
+
+        $this->addFlash('success', 'L\'employé a été désactivé avec succès.');
 
         return $this->redirectToRoute('app_workers');
     }

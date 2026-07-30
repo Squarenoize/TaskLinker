@@ -30,6 +30,19 @@
             <img src="{{ asset('img/logo.png') }}" alt="Logo TaskLinker" />
             <div class="main-public-container">
                 <div class="main-public-content">
+                
+                    {% for message in app.flashes('success') %}
+                        <div class="alert alert-success">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    
+                    {% for message in app.flashes('error') %}
+                        <div class="alert alert-error">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                    
                     {% block body %}{% endblock %}
                 </div>
             </div>
