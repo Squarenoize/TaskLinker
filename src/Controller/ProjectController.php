@@ -11,6 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 use Doctrine\ORM\EntityManagerInterface;
 
 #[Route('/project')]
@@ -32,10 +33,12 @@ final class ProjectController extends AbstractController
         return $this->render('projects/index.html.twig', [
             'pageTitle' => 'Projets',
             'projects' => $projects,
+            'activeLink' => 'projects',
         ]);
     }
 
     #[Route('/{id}', name: 'app_project_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[IsGranted('access_project', 'id')]
     public function show(int $id): Response
     {
         $project = $this->projectRepository->find($id);
@@ -57,6 +60,7 @@ final class ProjectController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/new', name: 'app_project_new', methods: ['GET', 'POST'])]
     public function create(Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -85,6 +89,7 @@ final class ProjectController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/edit', name: 'app_project_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
     public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
@@ -109,6 +114,7 @@ final class ProjectController extends AbstractController
         ]);
     }
 
+    #[IsGranted('ROLE_ADMIN')]
     #[Route('/{id}/archive', name: 'app_project_archive', requirements: ['id' => '\d+'], methods: ['POST'])]
     public function archive(int $id, EntityManagerInterface $entityManager, Request $request): Response
     {

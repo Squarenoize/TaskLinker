@@ -11,6 +11,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Attribute\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[Route('/task')]
 final class TaskController extends AbstractController
@@ -22,6 +23,7 @@ final class TaskController extends AbstractController
     }
 
     #[Route('/new/{projectId}', name: 'app_task_new', requirements: ['projectId' => '\d+'], methods: ['GET', 'POST'])]
+    #[IsGranted('access_project', 'projectId')]
     public function new(int $projectId, Request $request, EntityManagerInterface $entityManager): Response
     {
         $project = $this->projectRepository->find($projectId);
@@ -50,6 +52,7 @@ final class TaskController extends AbstractController
     }
 
     #[Route('/{id}/edit', name: 'app_task_edit', requirements: ['id' => '\d+'], methods: ['GET', 'POST'])]
+    #[IsGranted('access_task', 'id')]
     public function edit(int $id, Request $request, EntityManagerInterface $entityManager): Response
     {
         $task = $this->taskRepository->find($id);
@@ -75,6 +78,7 @@ final class TaskController extends AbstractController
     }
 
     #[Route('/{id}/delete', name: 'app_task_delete', requirements: ['id' => '\d+'], methods: ['POST'])]
+    #[IsGranted('access_task', 'id')]
     public function delete(int $id, EntityManagerInterface $entityManager, Request $request): Response
     {
         $task = $this->taskRepository->find($id);

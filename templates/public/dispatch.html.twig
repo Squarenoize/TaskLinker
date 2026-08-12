@@ -1,0 +1,10 @@
+{% extends 'public/base_public.html.twig' %}
+{% block title %}Bienvenue - TaskLinker{% endblock %}
+{% block body %}
+  <h1>{{ pageTitle }}</h1>
+   <h2>Commencez dès maintenant - gratuitement</h2>
+  <h3>Vous avez déjà un compte ?</h3>
+  <a class="btn"href="{{ path('app_login') }}">Se Connecter</a>
+  <div class="separator"><span class="separator-line"></span>ou<span class="separator-line"></span></div>
+  <a class="btn btn-secondary" href="{{ path('app_register') }}">S'inscrire</a>
+{% endblock %}

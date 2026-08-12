@@ -21,7 +21,7 @@
                               </div>
                               <div class="employee-coords">
                                  <strong>{{ worker.firstName }} {{ worker.lastName }}</strong>
-                                 <span>{{ worker.user.email }}</span>
+                                 <span>{{ worker.user ? worker.user.email : 'Aucun email' }}</span>
                               </div>
                            </div>
                         </td>

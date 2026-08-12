@@ -1,0 +1,18 @@
+{% extends 'public/base_public.html.twig' %}
+{% block title %}Inscription - TaskLinker{% endblock %}
+{% block body %}
+  <h1>{{ pageTitle }}</h1>
+
+  
+  {{ form_start(registrationForm) }}
+
+  {{ form_row(registrationForm.worker.lastname, {'label': 'Nom'}) }}
+  {{ form_row(registrationForm.worker.firstname, {'label': 'Prénom'}) }}
+  {{ form_row(registrationForm.email, {'label': 'Email'}) }}
+  {{ form_row(registrationForm.plainPassword, {'label': 'Mot de passe'}) }}
+
+  <button class="button button-submit" type="submit">Continuer</button>
+  {{ form_end(registrationForm) }}
+
+  <a href="{{ path('app_login') }}">Vous avez déjà un compte ?</a>
+{% endblock %}

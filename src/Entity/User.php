@@ -5,12 +5,17 @@ namespace App\Entity;
 use App\Repository\UserRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
 #[ORM\UniqueConstraint(name: 'UNIQ_IDENTIFIER_EMAIL', fields: ['email'])]
+#[UniqueEntity(
+    fields: ['email'],
+    message: 'Cette adresse email est déjà utilisée.'
+)]
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
     #[ORM\Id]
@@ -26,7 +31,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var list<string> The user roles
      */
-    #[ORM\Column]
+    #[ORM\Column(type: 'json')]
     private array $roles = [];
 
     /**
@@ -153,5 +158,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->deactivation_date = $deactivation_date;
 
         return $this;
+    }
+
+    public function getUserAvatar(): ?string
+    {
+        
+    return substr($this->worker->getFirstname(), 0, 1) . ' ' . substr($this->worker->getLastname(), 0, 1);
+    
     }
 }
