@@ -6,7 +6,9 @@
             <div class="avatar">{{ worker.firstname|first }}{{ worker.lastname|first }}</div>
         {% endfor %}
     </div>
-    <a class="button" href="{{ path('app_project_edit', {'id': project.id}) }}">Modifier</a>
+    {% if is_granted('ROLE_ADMIN') %}
+        <a class="button" href="{{ path('app_project_edit', {'id': project.id}) }}">Modifier</a>
+    {% endif %}
 {% endblock %}
 {% block body %}
 

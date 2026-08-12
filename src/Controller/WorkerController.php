@@ -2,7 +2,6 @@
 
 namespace App\Controller;
 
-use DateImmutable;
 use App\Form\WorkerType;
 use App\Repository\WorkerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -14,6 +13,7 @@ use Doctrine\ORM\EntityManagerInterface;
 #[Route('/worker')]
 final class WorkerController extends AbstractController
 {
+    
     #[Route('/', name: 'app_workers')]
     public function index(WorkerRepository $workerRepository): Response
     {
@@ -40,6 +40,12 @@ final class WorkerController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $user = $worker->getUser();
+            $selectedRole = $form->get('user')->get('roles')->getData();
+
+            if ($user && null !== $selectedRole) {
+                $user->setRoles([$selectedRole]);
+            }
 
             $entityManager->flush();
 

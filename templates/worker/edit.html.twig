@@ -4,12 +4,13 @@
 
 {% block body %}
                    {{ form_start(form) }}
-                   {{ form_row(form.lastname) }}
-                   {{ form_row(form.firstname) }}
-                   {{ form_row(form.user.email) }}
+                   {{ form_row(form.lastname, {'label': 'Nom'}) }}
+                   {{ form_row(form.firstname, {'label': 'Prénom'}) }}
+                   {{ form_row(form.user.email, {'label': 'E-mail'}) }}
+                   {{ form_row(form.user.roles, {'label': 'Rôle'}) }}
                    <div class="form-flex">
-                      <div>{{ form_row(form.starting_date) }}</div>
-                      <div>{{ form_row(form.contract) }}</div>
+                      <div>{{ form_row(form.starting_date, {'label': 'Date de début'}) }}</div>
+                      <div>{{ form_row(form.contract, {'label': 'Contrat'}) }}</div>
                    </div>
                    <button class="button button-submit" type="submit">Enregistrer</button>
                    {{ form_end(form) }}
