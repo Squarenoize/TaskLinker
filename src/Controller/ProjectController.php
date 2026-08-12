@@ -38,6 +38,7 @@ final class ProjectController extends AbstractController
     }
 
     #[Route('/{id}', name: 'app_project_show', requirements: ['id' => '\d+'], methods: ['GET'])]
+    #[IsGranted('access_project', 'id')]
     public function show(int $id): Response
     {
         $project = $this->projectRepository->find($id);
