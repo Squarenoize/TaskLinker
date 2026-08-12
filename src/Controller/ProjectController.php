@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Project;
+use App\Entity\User;
 use App\Repository\ProjectRepository;
 use App\Repository\StatusRepository;
 use App\Repository\TaskRepository;
@@ -21,14 +22,24 @@ final class ProjectController extends AbstractController
         private ProjectRepository $projectRepository,
         private StatusRepository $statusRepository,
         private TaskRepository $taskRepository,
-        )
-    {
+    ) {
     }
 
     #[Route('/', name: 'app_projects')]
     public function index(): Response
     {
-        $projects = $this->projectRepository->findAllActive();
+        $user = $this->getUser();
+
+        if (!$user instanceof User) {
+            throw $this->createAccessDeniedException('Vous devez être connecté pour accéder à cette page.');
+        }
+
+        if ($user->isAdmin()) {
+            $projects = $this->projectRepository->findAllActive();
+        } else {
+            $worker = $user->getWorker();
+            $projects = $this->projectRepository->findUserProjects($worker->getId());
+        }
 
         return $this->render('projects/index.html.twig', [
             'pageTitle' => 'Projets',

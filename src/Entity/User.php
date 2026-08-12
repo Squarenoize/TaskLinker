@@ -166,4 +166,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     return substr($this->worker->getFirstname(), 0, 1) . ' ' . substr($this->worker->getLastname(), 0, 1);
     
     }
+
+    public function isAdmin(): bool
+    {
+        return in_array('ROLE_ADMIN', $this->roles);
+    }
 }

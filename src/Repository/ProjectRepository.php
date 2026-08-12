@@ -25,6 +25,18 @@ class ProjectRepository extends ServiceEntityRepository
         ->getResult();
     }
 
+    public function findUserProjects(int $userId): array
+    {
+        return $this->createQueryBuilder('p')
+            ->innerJoin('p.workers', 'w')
+            ->andWhere('w.id = :userId')
+            ->setParameter('userId', $userId)
+            ->andWhere('p.archive_date IS NULL')
+            ->orderBy('p.id', 'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     //    /**
     //     * @return Project[] Returns an array of Project objects
     //     */
